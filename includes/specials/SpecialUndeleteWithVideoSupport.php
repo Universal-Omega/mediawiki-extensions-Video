@@ -1369,13 +1369,25 @@ class SpecialUndeleteWithVideoSupport extends SpecialPage {
 		}
 		// CORE HACK END
 		$this->getHookRunner()->onUndeleteForm__undelete( $archive, $this->mTargetObj );
-		$ok = $archive->undeleteAsUser(
-			$this->mTargetTimestamp,
-			$this->getUser(),
-			$this->mComment,
-			$this->mFileVersions,
-			$this->mUnsuppress
-		);
+		
+		// If VideoPageArchive, only calls undeleteAsUser
+		if ( method_exists( $archive, 'undeleteAsUser' ) ) {
+			$ok = $archive->undeleteAsUser(
+				$this->mTargetTimestamp,
+				$this->getUser(),
+				$this->mComment,
+				$this->mFileVersions,
+				$this->mUnsuppress
+			);
+		} else {
+			$ok = $archive->undelete(
+				$this->mTargetTimestamp,
+				$this->mComment,
+				$this->mFileVersions,
+				$this->mUnsuppress,
+				$this->getUser()
+			);
+		}
 
 		if ( is_array( $ok ) ) {
 			if ( $ok[1] ) { // Undeleted file count
