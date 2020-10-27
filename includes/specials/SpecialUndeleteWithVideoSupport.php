@@ -43,7 +43,7 @@ use Wikimedia\Rdbms\IResultWrapper;
  *
  * @ingroup SpecialPage
  */
-class SpecialUndelete extends SpecialPage {
+class SpecialUndeleteWithVideoSupport extends SpecialPage {
 	private $mAction;
 	private $mTarget;
 	private $mTimestamp;
